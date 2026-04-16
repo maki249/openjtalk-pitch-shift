@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-def speak(text, output="output_pitch_shift.wav"):
+def speak(text, output="output.wav"):
     base_dir = os.path.dirname(__file__)
     
     bin_path = os.path.join(base_dir, "open_jtalk-1.11", "bin", "open_jtalk")
