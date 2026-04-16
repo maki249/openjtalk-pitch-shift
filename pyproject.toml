@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pitsh-jtalk"
-version = "0.1.0"
+version = "0.1.1"  
 description = "特定の文字でピッチが変わる改造版Open JTalk"
 authors = [{name = "maki249"}]
 readme = "README.md"
@@ -19,3 +19,6 @@ py-modules = ["pitsh"]
     "voice/*",
     "open_jtalk-1.11/bin/open_jtalk"
 ]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["__pycache__/*"]
