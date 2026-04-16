@@ -5,6 +5,20 @@
 ## 概要
 通常の Open JTalk　にC言語で処理を追加し、特定の条件下で音声合成エンジン（hts_engine）のピッチパラメータを動的に変更するように改造しています。
 
+## インストール
+
+```bash
+pip install pitsh
+python3
+import pitsh
+pitsh.speak("1、2、3、4、5、6、7、8、9、10")
+```
+speak() を実行したあと、音が聞こえるか確認するには、Python の中で以下を打ってください。
+
+```bash
+import os
+os.system("afplay output_pitch_shift.wav")
+```
 ## ライセンス
 本プログラムはOpenJtalkのライセンスであるBSDライセンスに準じます。
 
