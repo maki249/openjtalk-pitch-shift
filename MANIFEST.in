@@ -1,0 +1,15 @@
+
+### 2. `pyproject.toml` を少し修正
+
+```toml
+[tool.setuptools]
+py-modules = ["pitsh"]
+include-package-data = true  # これを追加！
+
+[tool.setuptools.package-data]
+"*" = [
+    "dict/*",
+    "voice/*",
+    "open_jtalk-1.11/bin/open_jtalk",
+    "open_jtalk-1.11/**/*"
+]
