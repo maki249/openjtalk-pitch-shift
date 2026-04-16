@@ -3,24 +3,24 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pitsh-jtalk"
+name = "pitsh"
 version = "0.1.2"
-description = "特定の文字でピッチが変わる改造版Open JTalk"
+description = "特定の文字でピッチが変わる改造版Open JTalk（ビルド済みバイナリ同梱版）"
 authors = [{name = "maki249"}]
 readme = "README.md"
 requires-python = ">=3.8"
 
 [tool.setuptools]
-py-modules = ["pitsh"]
+# 読み込むパッケージディレクトリを pitsh に指定
+packages = ["pitsh"]
 
-# 【ここが最重要】フォルダ構造を再帰的に含める指定です
 [tool.setuptools.package-data]
-"*" = [
+# インストール対象に含めるファイルを明示
+"pitsh" = [
     "dict/*",
     "voice/*",
-    "open_jtalk-1.11/bin/open_jtalk",
-    "open_jtalk-1.11/**/*"
+    "bin/open_jtalk"
 ]
 
 [tool.setuptools.exclude-package-data]
-"*" = ["__pycache__/*"]
+"*" = ["**/__pycache__/*", "**/*.pyc"]
