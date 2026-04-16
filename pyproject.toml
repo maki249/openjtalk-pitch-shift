@@ -3,8 +3,19 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nabeatsu-jtalk"
+name = "pitsh-jtalk"
 version = "0.1.0"
-description = "3の倍数でアホになる改造版Open JTalk"
+description = "特定の文字でピッチが変わる改造版Open JTalk"
 authors = [{name = "maki249"}]
 readme = "README.md"
+requires-python = ">=3.8"
+
+[tool.setuptools]
+py-modules = ["pitsh"]
+
+[tool.setuptools.package-data]
+"*" = [
+    "dict/*",
+    "voice/*",
+    "open_jtalk-1.11/bin/open_jtalk"
+]
