@@ -24,16 +24,45 @@ jobs:
           python-version: '3.11'
 
       # ここでOSごとのコンパイル処理を書く（例）
-      - name: Build C Binary
+      # 1. Mac と Linux (Ubuntu) 用のビルド手順
+      - name: Build C Binary (Mac / Linux)
+        if: runner.os != 'Windows'
         run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            # Windows用のコンパイル（VSのツールが最初から入っています）
-            gcc -o pitsh/bin/open_jtalk.exe (ソースのパス)
-          else
-            # Mac/Linux用のコンパイル
-            gcc -o pitsh/bin/open_jtalk (ソースのパス)
-          fi
-        shell: bash
+          # pitsh フォルダの中にある hts_engine へ移動
+          cd pitsh/hts_engine_API-1.10
+          ./configure
+          make clean
+          make
+
+          # pitsh フォルダの中にある open_jtalk へ移動
+          cd ../open_jtalk-1.11
+          ./configure --with-hts-engine-header-path=`pwd`/../hts_engine_API-1.10/include --with-hts-engine-library-path=`pwd`/../hts_engine_API-1.10/lib --with-charset=UTF-8
+          make clean
+          make
+
+          # 出来上がった実行ファイルを pitsh/bin/ にコピー
+          cp bin/open_jtalk ../bin/open_jtalk
+
+      # 2. Windows 用のビルドツールの準備
+      - name: Setup MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      # 3. Windows 用のビルド手順
+      - name: Build C Binary (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          # Windows はパスの区切りが \ (バックスラッシュ) になります
+          cd pitsh\hts_engine_API-1.10
+          nmake /f Makefile.mak clean
+          nmake /f Makefile.mak
+
+          cd ..\open_jtalk-1.11
+          nmake /f Makefile.mak clean
+          nmake /f Makefile.mak
+
+          # 出来上がった .exe を pitsh\bin\ にコピー
+          copy bin\open_jtalk.exe ..\bin\open_jtalk.exe
 
       - name: Build Wheel
         run: |
