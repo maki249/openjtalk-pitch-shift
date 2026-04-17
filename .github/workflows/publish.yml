@@ -28,19 +28,18 @@ jobs:
       - name: Build C Binary (Mac / Linux)
         if: runner.os != 'Windows'
         run: |
-          # pitsh フォルダの中にある hts_engine へ移動
           cd pitsh/hts_engine_API-1.10
+          autoreconf -fiv  # ← ★コレを追加（古い設定をリセット）
           ./configure
           make clean
           make
 
-          # pitsh フォルダの中にある open_jtalk へ移動
           cd ../open_jtalk-1.11
+          autoreconf -fiv  # ← ★ここにも追加
           ./configure --with-hts-engine-header-path=`pwd`/../hts_engine_API-1.10/include --with-hts-engine-library-path=`pwd`/../hts_engine_API-1.10/lib --with-charset=UTF-8
           make clean
           make
 
-          # 出来上がった実行ファイルを pitsh/bin/ にコピー
           cp bin/open_jtalk ../bin/open_jtalk
 
       # 2. Windows 用のビルドツールの準備
