@@ -3,7 +3,8 @@ name: Build and Publish to PyPI
 on:
   push:
     tags:
-      - 'v*' # "v0.1.5" のようなタグを付けてpushした時にだけ動くようにする
+      - 'v*'
+  workflow_dispatch:  # ← ★この1行を同じインデント（字下げ）で追加！
 
 jobs:
   build-and-publish:
