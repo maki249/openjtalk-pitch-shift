@@ -87,8 +87,28 @@ jobs:
           pip install build
           python -m build
 
+      # ▼▼▼ 1. PyPIに直接上げるのではなく、一旦GitHubの倉庫に保存する ▼▼▼
+      - name: Store distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions-${{ matrix.os }}
+          path: dist/
+
+  # ▼▼▼ 2. 3つのOSのビルドが全部終わった後に動く「配達専用ジョブ」を追加 ▼▼▼
+  publish-to-pypi:
+    name: Publish to PyPI
+    needs: build-and-publish  # 上のビルドジョブが全部終わるのを待つ
+    runs-on: ubuntu-latest    # 配達係はLinux(Ubuntu)を指定
+    
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          pattern: python-package-distributions-*
+          path: dist/
+          merge-multiple: true  # 3つのOSのファイルを1つのフォルダにまとめる
+
       - name: Publish to PyPI
-        # PyPI公式のアップロード用Actionを使用
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
