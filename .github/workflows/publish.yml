@@ -23,6 +23,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      # Macのサーバーに足りないビルドツール(autotools)をインストールする
+      - name: Install autotools on macOS
+        if: runner.os == 'macOS'
+        run: brew install autoconf automake libtool
+
       # ここでOSごとのコンパイル処理を書く（例）
       # 1. Mac と Linux (Ubuntu) 用のビルド手順
       - name: Build C Binary (Mac / Linux)
