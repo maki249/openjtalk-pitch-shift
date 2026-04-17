@@ -56,7 +56,14 @@ jobs:
       - name: Build C Binary (Windows)
         if: runner.os == 'Windows'
         run: |
-          # Windows はパスの区切りが \ (バックスラッシュ) になります
+          # Windows特有のShift-JISエラーを回避し、Macと同じUTF-8でビルドするための置換処理
+          Get-ChildItem -Path pitsh\open_jtalk-1.11 -Filter Makefile.mak -Recurse | ForEach-Object {
+              $text = Get-Content $_.FullName
+              $text = $text -replace 'CHARSET_SHIFT_JIS', 'CHARSET_UTF_8'
+              $text = $text -replace 'SHIFT_JIS', 'UTF-8'
+              Set-Content -Path $_.FullName -Value $text
+          }
+
           cd pitsh\hts_engine_API-1.10
           nmake /f Makefile.mak clean
           nmake /f Makefile.mak
