@@ -56,16 +56,20 @@ jobs:
       - name: Build C Binary (Windows)
         if: runner.os == 'Windows'
         run: |
+          # 1. Makefile.mak の置換（Shift-JIS対策などはそのまま）
           Get-ChildItem -Path pitsh\open_jtalk-1.11 -Filter Makefile.mak -Recurse | ForEach-Object {
               $text = Get-Content $_.FullName
               $text = $text -replace 'CHARSET_SHIFT_JIS', 'CHARSET_UTF_8'
               $text = $text -replace 'SHIFT_JIS', 'UTF-8'
-              
-              # ▼▼▼ 新しく追加する1行（コンパイラにC++14の規格を指定する） ▼▼▼
               $text = $text -replace 'TP /EHsc', 'TP /EHsc /std:c++14'
-              
               Set-Content -Path $_.FullName -Value $text
           }
+
+          $cppFile = "pitsh\open_jtalk-1.11\mecab\src\dictionary.cpp"
+          $cppText = Get-Content $cppFile
+          # : public std::binary_function<...> という継承部分を丸ごと消去する
+          $cppText = $cppText -replace ': public std::binary_function<[^>]+>', ''
+          Set-Content -Path $cppFile -Value $cppText
 
           cd pitsh\hts_engine_API-1.10
           nmake /f Makefile.mak clean
