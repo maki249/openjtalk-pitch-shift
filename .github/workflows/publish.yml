@@ -56,11 +56,14 @@ jobs:
       - name: Build C Binary (Windows)
         if: runner.os == 'Windows'
         run: |
-          # Windows特有のShift-JISエラーを回避し、Macと同じUTF-8でビルドするための置換処理
           Get-ChildItem -Path pitsh\open_jtalk-1.11 -Filter Makefile.mak -Recurse | ForEach-Object {
               $text = Get-Content $_.FullName
               $text = $text -replace 'CHARSET_SHIFT_JIS', 'CHARSET_UTF_8'
               $text = $text -replace 'SHIFT_JIS', 'UTF-8'
+              
+              # ▼▼▼ 新しく追加する1行（コンパイラにC++14の規格を指定する） ▼▼▼
+              $text = $text -replace 'TP /EHsc', 'TP /EHsc /std:c++14'
+              
               Set-Content -Path $_.FullName -Value $text
           }
 
