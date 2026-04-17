@@ -1,0 +1,46 @@
+name: Build and Publish to PyPI
+
+on:
+  push:
+    tags:
+      - 'v*' # "v0.1.5" のようなタグを付けてpushした時にだけ動くようにする
+
+jobs:
+  build-and-publish:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # 3つのOSで同時にビルドを走らせる（マトリックス）
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ここでOSごとのコンパイル処理を書く（例）
+      - name: Build C Binary
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            # Windows用のコンパイル（VSのツールが最初から入っています）
+            gcc -o pitsh/bin/open_jtalk.exe (ソースのパス)
+          else
+            # Mac/Linux用のコンパイル
+            gcc -o pitsh/bin/open_jtalk (ソースのパス)
+          fi
+        shell: bash
+
+      - name: Build Wheel
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish to PyPI
+        # PyPI公式のアップロード用Actionを使用
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
