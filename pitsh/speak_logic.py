@@ -9,12 +9,7 @@ def speak(text, output="output_pitch_shift.wav"):
     
     # 1. 実行環境に合わせてバイナリ名を判定
     pf = platform.system()
-    if pf == "Windows":
-        jtalk_bin = "open_jtalk_Windows.exe"
-    elif pf == "Darwin":  # macOS
-        jtalk_bin = "open_jtalk_macOS"
-    else:                 # Linux (Ubuntu)
-        jtalk_bin = "open_jtalk_Linux"
+    jtalk_bin = "open_jtalk.exe"
 
     bin_path = base_dir / "bin" / jtalk_bin
     dict_path = base_dir / "dict"
