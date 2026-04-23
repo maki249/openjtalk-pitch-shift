@@ -8,6 +8,7 @@ pitsh.egg-info/PKG-INFO
 pitsh.egg-info/SOURCES.txt
 pitsh.egg-info/dependency_links.txt
 pitsh.egg-info/top_level.txt
+pitsh/bin/open_jtalk
 pitsh/dict/COPYING
 pitsh/dict/char.bin
 pitsh/dict/left-id.def

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pitsh
-Version: 0.1.7
+Version: 0.1.10
 Summary: 特定の文字でピッチが変わる改造版Open JTalk（ビルド済みバイナリ同梱版）
 Author: maki249
 Requires-Python: >=3.8
