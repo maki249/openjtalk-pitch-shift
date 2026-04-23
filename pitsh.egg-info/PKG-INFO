@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pitsh
-Version: 0.1.4
+Version: 0.1.7
 Summary: 特定の文字でピッチが変わる改造版Open JTalk（ビルド済みバイナリ同梱版）
 Author: maki249
 Requires-Python: >=3.8
@@ -10,10 +10,14 @@ Description-Content-Type: text/markdown
 
 「３」と「３の倍数」でを検知した際に、自動的にピッチを跳ね上げて読み上げる改造版 Open JTalk です。
 
+
 ## 概要
 通常の Open JTalk　にC言語で処理を追加し、特定の条件下で音声合成エンジン（hts_engine）のピッチパラメータを動的に変更するように改造しています。
 
 ## インストール
+⭐︎注意
+このインストールができるのは現時点でmacOSのみです。
+WindowsPCが治り次第、ビルドしてWindowsでも実行できるようにします。
 
 ```bash
 pip install pitsh
