@@ -37,8 +37,8 @@ jobs:
           make clean
           make
 
-          # バイナリの名前をOSごとに変更してコピー（衝突防止）
-          cp bin/open_jtalk ../bin/open_jtalk_${{ runner.os }}
+          # 【修正1】ファイル名は変えずにそのままコピー
+          cp bin/open_jtalk ../bin/open_jtalk
 
       - name: Setup MSVC (Windows)
         if: runner.os == 'Windows'
@@ -69,14 +69,17 @@ jobs:
           nmake /f Makefile.mak clean
           nmake /f Makefile.mak
 
-          copy bin\open_jtalk.exe ..\bin\open_jtalk_Windows.exe
+          # 【修正2】ファイル名は変えずにそのままコピー
+          copy bin\open_jtalk.exe ..\bin\open_jtalk.exe
 
-      # 作ったバイナリをGitHubの倉庫に一時保存
+      # 【修正3】ワイルドカードで拾い上げる
       - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: binary-${{ runner.os }}
-          path: pitsh/bin/open_jtalk_*
+          # アスタリスクをつけることで、Mac/Linuxの "open_jtalk" と Windowsの "open_jtalk.exe" の両方に対応
+          path: pitsh/bin/open_jtalk*
+          # （※ v4 からは、同名のファイルがあってもArtifact名が違えば上書きされません）
 
   # 2. 3つのバイナリを集めて1つのパッケージにまとめ、PyPIへ送るジョブ
   publish-to-pypi:
@@ -92,17 +95,19 @@ jobs:
         with:
           python-version: '3.11'
 
-      # GitHubにある既存の dist/ が邪魔になるのでビルド前に完全削除
       - name: Clean up old dist files
         run: rm -rf dist/
 
-      # 3つのOSのバイナリを pitsh/bin/ フォルダに集結させる
       - name: Download all binaries
         uses: actions/download-artifact@v4
         with:
           pattern: binary-*
           path: pitsh/bin/
           merge-multiple: true
+
+      # ★【追加】集結させた直後に中身を確認する「のぞき穴」
+      - name: Debug - Check bin directory contents
+        run: ls -la pitsh/bin/
 
       - name: Build Wheel
         run: |
